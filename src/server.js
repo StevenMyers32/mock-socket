@@ -193,13 +193,13 @@ class Server extends EventTarget {
    * Simulate an event from the server to the clients. Useful for
    * simulating errors.
    */
-  simulate(event) {
+  simulate(event, eventProps = {}) {
     const listeners = networkBridge.websocketsLookup(this.url);
 
     if (event === 'error') {
       listeners.forEach(socket => {
         socket.readyState = WebSocket.CLOSE;
-        socket.dispatchEvent(createEvent({ type: 'error' }));
+        socket.dispatchEvent(createEvent({ type: 'error', ...eventProps}));
       });
     }
   }
